@@ -16,28 +16,28 @@
     </style>
   </head>
   <body>
-    <canvas id="myCanvas" width="500" height="320"></canvas>
+    <canvas id="myCanvas" width="500" height="320"> </canvas>
 
     <script>
       var canvas = document.getElementById("myCanvas");
       var ctx = canvas.getContext("2d");
       var planePosition = 0;
       var bullets = [];
-      var y = canvas.height - 10;
+      var y = canvas.height - 20;
       var dx = 25;
 
       function drawPlane() {
-        ctx.beginPath();
-        ctx.rect(planePosition, y, 50, 20);
-        ctx.fillStyle = "#0095DD";
-        ctx.fill();
-        ctx.closePath();
+        const plane = new Image();
+        plane.src = "assets/aircraft.png";
+        plane.onload = () => {
+          ctx.drawImage(plane, planePosition, y, 50, 20);
+        };
       }
 
       function shot() {
         const bullet = {
           x: planePosition + 20,
-          y: canvas.height - 20
+          y: canvas.height - 48,
         };
         bullets.push(bullet);
       }
@@ -53,15 +53,18 @@
       function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         drawPlane();
-        bullets.map(bullet => {
-          bullet.y -= 10;
-          drawShot(bullet.x, bullet.y);
-        });
       }
 
       draw();
 
-      setInterval(draw, 50);
+      setInterval(() => {
+        bullets.map(bullet => {
+          ctx.clearRect(bullet.x, bullet.y, 10, 30);
+          bullet.y -= 10;
+          drawShot(bullet.x, bullet.y);
+        });
+        
+      }, 50)
 
       document.addEventListener("keydown", function (e) {
         switch (e.keyCode) {
@@ -77,14 +80,10 @@
       });
 
       document.addEventListener("keydown", function (e) {
-        switch (e.keyCode) {
-          case 32:
-            shot();
-            draw();
-            break;
+        if (e.keyCode === 32) {
+          shot();
         }
       });
-
     </script>
   </body>
 </html>
