@@ -11,7 +11,7 @@
       canvas {
         background: #eee;
         display: block;
-        margin: 0 auto;
+        margin: 200px auto;
       }
     </style>
   </head>
@@ -21,13 +21,30 @@
     <script>
       var canvas = document.getElementById("myCanvas");
       var ctx = canvas.getContext("2d");
-      var x = 0;
+      var planePosition = 0;
+      var bullets = [];
       var y = canvas.height - 10;
-      var dx = 50;
+      var dx = 25;
 
-      function drawBall() {
+      function drawPlane() {
         ctx.beginPath();
-        ctx.rect(x, y, 50, 20);
+        ctx.rect(planePosition, y, 50, 20);
+        ctx.fillStyle = "#0095DD";
+        ctx.fill();
+        ctx.closePath();
+      }
+
+      function shot() {
+        const bullet = {
+          x: planePosition + 20,
+          y: canvas.height - 20
+        };
+        bullets.push(bullet);
+      }
+
+      function drawShot(x, y) {
+        ctx.beginPath();
+        ctx.rect(x, y, 10, 30);
         ctx.fillStyle = "#0095DD";
         ctx.fill();
         ctx.closePath();
@@ -35,25 +52,39 @@
 
       function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        drawBall();
+        drawPlane();
+        bullets.map(bullet => {
+          bullet.y -= 10;
+          drawShot(bullet.x, bullet.y);
+        });
       }
 
       draw();
 
+      setInterval(draw, 50);
+
       document.addEventListener("keydown", function (e) {
         switch (e.keyCode) {
           case 37:
-            if(x - dx >= 0) x -= dx;
+            if (planePosition - dx >= 0) planePosition -= dx;
             draw();
-            console.log(x)
             break;
           case 39:
-          if(x + dx < canvas.width) x += dx;
+            if (planePosition + dx < canvas.width - 25) planePosition += dx;
             draw();
-            console.log(x)
             break;
         }
       });
+
+      document.addEventListener("keydown", function (e) {
+        switch (e.keyCode) {
+          case 32:
+            shot();
+            draw();
+            break;
+        }
+      });
+
     </script>
   </body>
 </html>
