@@ -21,22 +21,22 @@
     <script>
       var canvas = document.getElementById("myCanvas");
       var ctx = canvas.getContext("2d");
-      var planePosition = 0;
+      var aircraftPosition = 0;
       var bullets = [];
       var y = canvas.height - 20;
       var dx = 25;
 
-      function drawPlane() {
-        const plane = new Image();
-        plane.src = "assets/aircraft.png";
-        plane.onload = () => {
-          ctx.drawImage(plane, planePosition, y, 50, 20);
+      function drawAircraft() {
+        const aircraft = new Image();
+        aircraft.src = "assets/aircraft.png";
+        aircraft.onload = () => {
+          ctx.drawImage(aircraft, aircraftPosition, y, 50, 20);
         };
       }
 
       function shot() {
         const bullet = {
-          x: planePosition + 20,
+          x: aircraftPosition + 22,
           y: canvas.height - 48,
         };
         bullets.push(bullet);
@@ -44,15 +44,15 @@
 
       function drawShot(x, y) {
         ctx.beginPath();
-        ctx.rect(x, y, 10, 30);
-        ctx.fillStyle = "#0095DD";
+        ctx.rect(x, y, 5, 30);
+        ctx.fillStyle = "#eb4034";
         ctx.fill();
         ctx.closePath();
       }
 
       function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        drawPlane();
+        drawAircraft();
       }
 
       draw();
@@ -69,11 +69,11 @@
       document.addEventListener("keydown", function (e) {
         switch (e.keyCode) {
           case 37:
-            if (planePosition - dx >= 0) planePosition -= dx;
+            if (aircraftPosition - dx >= 0) aircraftPosition -= dx;
             draw();
             break;
           case 39:
-            if (planePosition + dx < canvas.width - 25) planePosition += dx;
+            if (aircraftPosition + dx < canvas.width - 25) aircraftPosition += dx;
             draw();
             break;
         }
